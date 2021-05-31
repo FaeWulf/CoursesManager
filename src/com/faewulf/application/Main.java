@@ -1,5 +1,4 @@
 package com.faewulf.application;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +10,6 @@ public class Main extends JFrame {
     private JPanel Panel1;
     private String username, password;
     private int userType;
-    private int isCorrect = 0;
 
     public Main() {
 
@@ -31,13 +29,11 @@ public class Main extends JFrame {
                     Officer tab = new Officer();
                     dispose();
                     tab.setVisible(true);
+
+
                 }
             }
         });
-    }
-
-    public boolean isLogin() {
-        return isCorrect != 0;
     }
 
 
