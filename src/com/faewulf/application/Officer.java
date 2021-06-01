@@ -1,5 +1,8 @@
 package com.faewulf.application;
 
+import Database.account;
+import com.model.accountDB;
+import Database.account.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,16 +19,54 @@ public class Officer extends JFrame{
     private JPanel classTab = new Subjects().newPanel();
     private JPanel studentTab = new Subjects().newPanel();
     private JPanel semesterTab = new Subjects().newPanel();
-    private JPanel accountTab = new Subjects().newPanel();
+    private JPanel accountTab = new accountPanel().newPanel();
 
-    public Officer() {
+    public Officer(accountDB account_) {
         setSize(1200, 750);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         add(Officer);
+
+        InfoTab.setText("ID:	" + account_.getId() + "\n" +
+                        "Full name: 	" + account_.getFullName() + "\n" +
+                        "Date of birth:	" + account_.getBirth() + "\n" +
+                        "Place of birth:	" + account_.getBirthPlace() + "\n" +
+                        "Live in:	" + account_.getLivePlace() + "\n" +
+                        "Account type:	" + account_.getAccountType() + "\n" +
+                        "Username:	" + account_.getUsername() + "\n"
+                );
+
         tabbedPane1.addTab("Accounts", accountTab);
         tabbedPane1.addTab("Students", studentTab);
         tabbedPane1.addTab("Classes", classTab);
         tabbedPane1.addTab("Semesters", semesterTab);
         tabbedPane1.addTab("Subjects", subTab);
+
+
+        editInfoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changePass tabchange = new changePass(account_);
+                tabchange.setLocationRelativeTo(null);
+                tabchange.setVisible(true);
+                if(tabchange.isChanged()){
+                    account.updateAccount(account_, account_);
+                    dispose();
+                    Officer newTab = new Officer(account_);
+                    newTab.setLocationRelativeTo(null);
+                    newTab.setVisible(true);
+                }
+
+            }
+        });
+
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                Main tab = new Main();
+                tab.setLocationRelativeTo(null);
+                tab.setVisible(true);
+            }
+        });
     }
 }

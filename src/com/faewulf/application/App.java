@@ -7,11 +7,9 @@ public class App {
     public static void main(String[] args) {
         List<accountDB> list = account.getAccountList();
 
-        list.forEach(Key -> {
-            System.out.println(Key.getFullName());
-        });
 
         Main app = new Main();
+        app.setLocationRelativeTo(null);
         app.setVisible(true);
     }
 }

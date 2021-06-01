@@ -2,7 +2,7 @@ package com.faewulf.application;
 
 import javax.swing.*;
 
-public class Student {
+public class Student extends JFrame{
     private JPanel panel1;
     private JPanel infoTab;
     private JPanel generalTab;
