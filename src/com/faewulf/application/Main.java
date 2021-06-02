@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Main extends JFrame {
     private JTextField usernameField;
@@ -30,7 +29,7 @@ public class Main extends JFrame {
                 username = usernameField.getText();
                 password = String.valueOf(passwordField.getPassword());
 
-                List<accountDB> list = account.getAccountList();
+                List<accountDB> list = allData.accountList;
                 accountDB temp = null;
 
 

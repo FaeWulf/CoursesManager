@@ -2,7 +2,6 @@ package com.faewulf.application;
 
 import Database.account;
 import com.model.accountDB;
-import Database.account.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +14,7 @@ public class Officer extends JFrame{
     private JTextArea helpTab;
     private JButton logoutButton;
     private JLabel labelTab;
+    private JButton refresh;
     private JPanel subTab = new Subjects().newPanel();
     private JPanel classTab = new Subjects().newPanel();
     private JPanel studentTab = new Subjects().newPanel();
@@ -66,6 +66,14 @@ public class Officer extends JFrame{
                 Main tab = new Main();
                 tab.setLocationRelativeTo(null);
                 tab.setVisible(true);
+            }
+        });
+        refresh.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               removeAll();
+               revalidate();
+               repaint();
             }
         });
     }
