@@ -15,17 +15,19 @@ public class Officer extends JFrame{
     private JButton logoutButton;
     private JLabel labelTab;
     private JButton refresh;
+    private accountDB currentUseAccount;
     private JPanel subTab = new Subjects().newPanel();
     private JPanel classTab = new Subjects().newPanel();
     private JPanel studentTab = new Subjects().newPanel();
     private JPanel semesterTab = new Subjects().newPanel();
-    private JPanel accountTab = new accountPanel().newPanel();
 
     public Officer(accountDB account_) {
+        currentUseAccount = account_;
         setSize(1200, 750);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         add(Officer);
 
+        JPanel accountTab = new accountPanel().newPanel(currentUseAccount);
         InfoTab.setText("ID:	" + account_.getId() + "\n" +
                         "Full name: 	" + account_.getFullName() + "\n" +
                         "Date of birth:	" + account_.getBirth() + "\n" +
@@ -40,7 +42,6 @@ public class Officer extends JFrame{
         tabbedPane1.addTab("Classes", classTab);
         tabbedPane1.addTab("Semesters", semesterTab);
         tabbedPane1.addTab("Subjects", subTab);
-
 
         editInfoButton.addActionListener(new ActionListener() {
             @Override
@@ -68,13 +69,5 @@ public class Officer extends JFrame{
                 tab.setVisible(true);
             }
         });
-        refresh.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               removeAll();
-               revalidate();
-               repaint();
-            }
-        });
-    }
+   }
 }

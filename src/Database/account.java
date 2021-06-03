@@ -1,6 +1,5 @@
 package Database;
 
-import java.awt.*;
 import java.util.List;
 
 import com.HibernateUtil.HibernateUtil;
@@ -11,8 +10,8 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 public class account {
     public static List<accountDB> getAccountList() {
@@ -57,68 +56,65 @@ public class account {
         return true;
     }
 
-    public static JTable toTable() {
-        JTable table = new JTable(new JTableButtonModel());
-        TableCellRenderer tableRenderer = table.getDefaultRenderer(JButton.class);
-        table.setDefaultRenderer(JButton.class, new JTableButtonRenderer(tableRenderer));
-        table.getTableHeader().setReorderingAllowed(false);
+    public static boolean deleteAccount(accountDB acc) {
+        List<accountDB> list = null;
+        new HibernateUtil();
+        Session session = HibernateUtil.getSessionFactory().openSession();
 
+        try {
+            String hql = "DELETE FROM accountDB a WHERE a.id = :id";
+            session.getTransaction().begin();
+            Query query = session.createQuery(hql);
+            query.setParameter("id", acc.getId());
+            int affectedRows = query.executeUpdate();
+            session.getTransaction().commit();
+        } catch (HibernateError ex) {
+            session.getTransaction().rollback();
+            System.err.println(ex);
+            return false;
+        }
+        return true;
+    }
+
+    public static JTable toTable() {
+        String[] columns = {"Id", "Fullname","Username", "Password","Birth Day", "Birth Place", "Living Place"};
+        Object[][] result = new Object[allData.accountList.size()][columns.length];
+
+        for(int i = 0; i < allData.accountList.size(); i++) {
+            result[i][0] = allData.accountList.get(i).getId();
+            result[i][1] = allData.accountList.get(i).getFullName();
+            result[i][2] = allData.accountList.get(i).getUsername();
+            result[i][3] = allData.accountList.get(i).getPassword();
+            result[i][4] = allData.accountList.get(i).getBirth().toString();
+            result[i][5] = allData.accountList.get(i).getBirthPlace();
+            result[i][6] = allData.accountList.get(i).getLivePlace();
+        };
+        TableModel model = new DefaultTableModel(result, columns);
+        JTable table = new JTable(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        table.setModel(model);
+        table.getTableHeader().setReorderingAllowed(false);
         return table;
     }
 
-}
+    public static TableModel modelUpdate(){
+        String[] columns = {"Id", "Fullname","Username", "Password","Birth Day", "Birth Place", "Living Place"};
+        Object[][] result = new Object[allData.accountList.size()][columns.length];
 
-class JTableButtonRenderer implements TableCellRenderer {
-    private TableCellRenderer defaultRenderer;
-    public JTableButtonRenderer(TableCellRenderer renderer){
-        defaultRenderer = renderer;
-    }
-
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        if(value instanceof Component)
-            return (Component) value;
-        return defaultRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-    }
-}
-
-class JTableButtonModel extends AbstractTableModel {
-    private final List<accountDB> list = allData.accountList;
-    private final String[] columns = {"Id", "Fullname","Username", "Password","Birth Day", "Birth Place", "Living Place", "Option"};
-    private Object[][] result = new Object[list.size()][columns.length];
-
-    public JTableButtonModel() {
-        for(int i = 0; i < list.size(); i++) {
-            result[i][0] = list.get(i).getId();
-            result[i][1] = list.get(i).getFullName();
-            result[i][2] = list.get(i).getUsername();
-            result[i][3] = list.get(i).getPassword();
-            result[i][4] = list.get(i).getBirth().toString();
-            result[i][5] = list.get(i).getBirthPlace();
-            result[i][6] = list.get(i).getLivePlace();
-            result[i][7] = new JButton("Edit");
-        }
-    }
-
-    public String getColumnName(int column) {
-        return columns[column];
-    }
-
-    public int getRowCount() {
-        return result.length;
-    }
-
-    public int getColumnCount() {
-        return columns.length;
-    }
-
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        return result[rowIndex][columnIndex];
-    }
-
-    public boolean isCellEditable(int row, int column) {
-        return false;
-    }
-    public Class getColumnClass(int column) {
-        return getValueAt(0, column).getClass();
+        for(int i = 0; i < allData.accountList.size(); i++) {
+            result[i][0] = allData.accountList.get(i).getId();
+            result[i][1] = allData.accountList.get(i).getFullName();
+            result[i][2] = allData.accountList.get(i).getUsername();
+            result[i][3] = allData.accountList.get(i).getPassword();
+            result[i][4] = allData.accountList.get(i).getBirth().toString();
+            result[i][5] = allData.accountList.get(i).getBirthPlace();
+            result[i][6] = allData.accountList.get(i).getLivePlace();
+        };
+        return new DefaultTableModel(result, columns);
     }
 }
+
