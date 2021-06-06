@@ -1,6 +1,7 @@
 package com.faewulf.application.semester;
 
 import Database.semester;
+import com.faewulf.application.Util.doubleCheck;
 import com.faewulf.application.allData;
 import com.model.semesterDB;
 
@@ -74,7 +75,30 @@ public class semesterPanel {
                     current.setStart(tab.result.getStart());
                     current.setEnd(tab.result.getEnd());
                     tableDB[0].setModel(semester.modelUpdate());
+
                 }
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                doubleCheck tab = new doubleCheck("Are you sure to delete all selected semesters?");
+                tab.setLocationRelativeTo(null);
+                tab.setVisible(true);
+                if(tab.isAccept()){
+                    int[] rows = tableDB[0].getSelectedRows();
+                    for (int row : rows) {
+                        String index = (String) tableDB[0].getValueAt(row, 0);
+                        int year = (int) tableDB[0].getValueAt(row, 1);
+                        semesterDB temp = allData.semesterList.stream().filter(E -> E.getId().equals(index) && E.getYear() == year).findFirst().get();
+                        if(temp != null){
+                            semester.deleteSemester(temp);
+                        }
+                    }
+                    tableDB[0].setModel(semester.modelUpdate());
+                }
+
             }
         });
 

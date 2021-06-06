@@ -8,13 +8,19 @@
     <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
     <property name="hibernate.connection.username">admin</property>
     <property name="hibernate.connection.password">admin</property>
+    <mapping class="com.model.subjectDB"/>
     <mapping class="com.model.accountDB"/>
     <mapping resource="AccountEntity.hbm.xml"/>
     <mapping resource="SubjectDB.hbm.xml"/>
-    <mapping class="com.model.subjectDB"/>
+    <mapping class="com.model.clazzDB"/>
     <mapping class="com.model.semesterDB"/>
     <mapping resource="SemesterDB.hbm.xml"/>
-    <mapping class="com.model.subjectDB"/>
+    <mapping resource="ClazzDB.hbm.xml"/>
+    <mapping resource="DkhpDB.hbm.xml"/>
+    <mapping resource="HpDB.hbm.xml"/>
+    <mapping resource="KydkhpDB.hbm.xml"/>
+    <mapping resource="StudentDB.hbm.xml"/>
+    <mapping resource="StudyatDB.hbm.xml"/>
 
 
     <!-- DB schema will be updated if needed -->

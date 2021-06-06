@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.model.clazzDB" table="clazz" schema="coursesmanager">
+        <id name="id">
+            <column name="id" sql-type="varchar(255)"/>
+        </id>
+        <property name="size">
+            <column name="size" sql-type="int"/>
+        </property>
+        <property name="male">
+            <column name="male" sql-type="int"/>
+        </property>
+        <property name="female">
+            <column name="female" sql-type="int"/>
+        </property>
+        <property name="year">
+            <column name="year" sql-type="int"/>
+        </property>
+    </class>
+</hibernate-mapping>

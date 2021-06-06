@@ -4,7 +4,9 @@ import Database.account;
 import com.faewulf.application.account.accountPanel;
 import com.faewulf.application.account.changePass;
 import com.faewulf.application.semester.semesterPanel;
+import com.faewulf.application.student.studentPanel;
 import com.faewulf.application.subject.subjectPanel;
+import com.faewulf.application.clazz.clazzPanel;
 import com.model.accountDB;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -20,12 +22,11 @@ public class Officer extends JFrame{
     private JLabel labelTab;
     private JButton refresh;
     private accountDB currentUseAccount;
-    private JPanel classTab = new Subjects().newPanel();
-    private JPanel studentTab = new Subjects().newPanel();
 
     public Officer(accountDB account_) {
         currentUseAccount = account_;
         setSize(1200, 750);
+        setTitle("Courses Manager: login as Officer");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         add(Officer);
 
@@ -41,13 +42,14 @@ public class Officer extends JFrame{
         JPanel subTab = new subjectPanel().newPanel();
         JPanel accountTab = new accountPanel().newPanel(currentUseAccount);
         JPanel semesterTab = new semesterPanel().newPanel();
+        JPanel classTab = new clazzPanel().newPanel();
+        JPanel studentTab = new studentPanel().newPanel();
 
         tabbedPane1.addTab("Accounts", accountTab);
         tabbedPane1.addTab("Subjects", subTab);
         tabbedPane1.addTab("Semesters", semesterTab);
-        tabbedPane1.addTab("Students", studentTab);
         tabbedPane1.addTab("Classes", classTab);
-
+        tabbedPane1.addTab("Students and Classes", studentTab);
         editInfoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
