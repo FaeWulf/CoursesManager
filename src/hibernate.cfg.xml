@@ -5,11 +5,16 @@
 <hibernate-configuration>
   <session-factory>
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/coursesmanager</property>
-    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
     <property name="hibernate.connection.username">admin</property>
     <property name="hibernate.connection.password">admin</property>
     <mapping class="com.model.accountDB"/>
     <mapping resource="AccountEntity.hbm.xml"/>
+    <mapping resource="SubjectDB.hbm.xml"/>
+    <mapping class="com.model.subjectDB"/>
+    <mapping class="com.model.semesterDB"/>
+    <mapping resource="SemesterDB.hbm.xml"/>
+    <mapping class="com.model.subjectDB"/>
 
 
     <!-- DB schema will be updated if needed -->

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.model.semesterDB" table="semester" schema="coursesmanager">
+        <composite-id  class="com.model.semesterDBPK">
+            <key-property name="id">
+                <column name="ID" sql-type="varchar(3)" length="3"/>
+            </key-property>
+            <key-property name="year">
+                <column name="year" sql-type="int"/>
+            </key-property>
+        </composite-id>
+        <property name="start">
+            <column name="start" sql-type="date"/>
+        </property>
+        <property name="end">
+            <column name="end" sql-type="date"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,6 +1,8 @@
-package com.faewulf.application;
+package com.faewulf.application.account;
 
 import Database.account;
+import com.faewulf.application.allData;
+import com.faewulf.application.Util.doubleCheck;
 import com.model.accountDB;
 
 import javax.swing.*;
@@ -8,6 +10,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.List;
 
 public class accountPanel extends JPanel {
@@ -17,6 +21,9 @@ public class accountPanel extends JPanel {
     private JButton editButton;
     private JButton resetButton;
     private JButton deleteButton;
+    private JButton createButton;
+    private JTextField searchBar;
+    private JLabel searchLabel;
 
     public JPanel newPanel(accountDB currentUseAccount){
         editButton.setEnabled(false);
@@ -25,6 +32,32 @@ public class accountPanel extends JPanel {
         final JTable[] tableDat = {account.toTable()};
         scrpane.setViewportView(tableDat[0]);
         this.setVisible(true);
+
+        searchBar.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String temp = searchBar.getText();
+                if(temp.length() == 0){
+                    tableDat[0].setModel(account.modelUpdate());
+                    scrpane.setViewportView(tableDat[0]);
+                }
+                else {
+                    tableDat[0].setModel(account.modelUpdate(temp));
+                    scrpane.setViewportView(tableDat[0]);
+                }
+
+            }
+        });
 
         tableDat[0].getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -68,7 +101,6 @@ public class accountPanel extends JPanel {
                 List<accountDB> list = allData.accountList;
                 accountDB result = list.stream().filter(E -> E.getId() == row).findFirst().get();
                 editAccount tab = new editAccount(result);
-                tab.setSize(500,500);
                 tab.setLocationRelativeTo(null);
                 tab.setVisible(true);
                 if(tab.isChanged()){
@@ -120,7 +152,6 @@ public class accountPanel extends JPanel {
                             continue;
                         accountDB temp = list.stream().filter(K -> K.getId() == ID).findFirst().get();
                         account.deleteAccount(temp);
-                        list.remove(temp);
                     }
 
                     tableDat[0].setModel(account.modelUpdate());
@@ -130,6 +161,21 @@ public class accountPanel extends JPanel {
                 }
         });
 
+        createButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createAccount tab = new createAccount();
+                tab.setLocationRelativeTo(null);
+                tab.setVisible(true);
+                if(tab.isInsert){
+                    tab.result.setAccountType(0);
+                    account.createAccount(tab.result);
+
+                    tableDat[0].setModel(account.modelUpdate());
+                    scrpane.setViewportView(tableDat[0]);
+                }
+            }
+        });
         return panel;
     }
 }

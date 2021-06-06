@@ -1,6 +1,10 @@
 package com.faewulf.application;
 
 import Database.account;
+import com.faewulf.application.account.accountPanel;
+import com.faewulf.application.account.changePass;
+import com.faewulf.application.semester.semesterPanel;
+import com.faewulf.application.subject.subjectPanel;
 import com.model.accountDB;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -16,10 +20,8 @@ public class Officer extends JFrame{
     private JLabel labelTab;
     private JButton refresh;
     private accountDB currentUseAccount;
-    private JPanel subTab = new Subjects().newPanel();
     private JPanel classTab = new Subjects().newPanel();
     private JPanel studentTab = new Subjects().newPanel();
-    private JPanel semesterTab = new Subjects().newPanel();
 
     public Officer(accountDB account_) {
         currentUseAccount = account_;
@@ -27,7 +29,6 @@ public class Officer extends JFrame{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         add(Officer);
 
-        JPanel accountTab = new accountPanel().newPanel(currentUseAccount);
         InfoTab.setText("ID:	" + account_.getId() + "\n" +
                         "Full name: 	" + account_.getFullName() + "\n" +
                         "Date of birth:	" + account_.getBirth() + "\n" +
@@ -37,11 +38,15 @@ public class Officer extends JFrame{
                         "Username:	" + account_.getUsername() + "\n"
                 );
 
+        JPanel subTab = new subjectPanel().newPanel();
+        JPanel accountTab = new accountPanel().newPanel(currentUseAccount);
+        JPanel semesterTab = new semesterPanel().newPanel();
+
         tabbedPane1.addTab("Accounts", accountTab);
+        tabbedPane1.addTab("Subjects", subTab);
+        tabbedPane1.addTab("Semesters", semesterTab);
         tabbedPane1.addTab("Students", studentTab);
         tabbedPane1.addTab("Classes", classTab);
-        tabbedPane1.addTab("Semesters", semesterTab);
-        tabbedPane1.addTab("Subjects", subTab);
 
         editInfoButton.addActionListener(new ActionListener() {
             @Override

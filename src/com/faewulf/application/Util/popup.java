@@ -1,4 +1,4 @@
-package com.faewulf.application;
+package com.faewulf.application.Util;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -13,6 +13,7 @@ public class popup extends JDialog {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
+        setResizable(false);
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

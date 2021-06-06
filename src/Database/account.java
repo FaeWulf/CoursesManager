@@ -7,6 +7,7 @@ import com.faewulf.application.allData;
 import com.model.accountDB;
 import org.hibernate.HibernateError;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import javax.swing.*;
@@ -30,7 +31,6 @@ public class account {
     }
 
     public static boolean updateAccount(accountDB _old, accountDB _new) {
-        List<accountDB> list = null;
         new HibernateUtil();
         Session session = HibernateUtil.getSessionFactory().openSession();
 
@@ -57,7 +57,6 @@ public class account {
     }
 
     public static boolean deleteAccount(accountDB acc) {
-        List<accountDB> list = null;
         new HibernateUtil();
         Session session = HibernateUtil.getSessionFactory().openSession();
 
@@ -73,6 +72,24 @@ public class account {
             System.err.println(ex);
             return false;
         }
+        allData.accountList.remove(acc);
+        return true;
+    }
+
+    public static boolean createAccount(accountDB acc) {
+        new HibernateUtil();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            session.save(acc);
+            transaction.commit();
+        } catch (HibernateError ex) {
+            transaction.rollback();
+            System.err.println(ex);
+            return false;
+        }
+        allData.accountList.add(acc);
         return true;
     }
 
@@ -113,6 +130,28 @@ public class account {
             result[i][4] = allData.accountList.get(i).getBirth().toString();
             result[i][5] = allData.accountList.get(i).getBirthPlace();
             result[i][6] = allData.accountList.get(i).getLivePlace();
+        };
+        return new DefaultTableModel(result, columns);
+    }
+    public static TableModel modelUpdate(String searchString){
+        String[] columns = {"Id", "Fullname","Username", "Password","Birth Day", "Birth Place", "Living Place"};
+        int resultSize = 0;
+        for(int i = 0; i < allData.accountList.size(); i++)
+            if(String.valueOf(allData.accountList.get(i).getId()).equals(searchString))
+                resultSize++;
+
+        Object[][] result = new Object[resultSize][columns.length];
+        int index = 0;
+        for(int i = 0; i < allData.accountList.size(); i++) {
+            if(searchString.length() != 0 && !String.valueOf(allData.accountList.get(i).getId()).equals(searchString))
+                continue;
+            result[index][0] = allData.accountList.get(i).getId();
+            result[index][1] = allData.accountList.get(i).getFullName();
+            result[index][2] = allData.accountList.get(i).getUsername();
+            result[index][3] = allData.accountList.get(i).getPassword();
+            result[index][4] = allData.accountList.get(i).getBirth().toString();
+            result[index][5] = allData.accountList.get(i).getBirthPlace();
+            result[index++][6] = allData.accountList.get(i).getLivePlace();
         };
         return new DefaultTableModel(result, columns);
     }

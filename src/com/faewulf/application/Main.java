@@ -1,5 +1,5 @@
 package com.faewulf.application;
-import Database.account;
+import com.faewulf.application.Util.popup;
 import com.model.accountDB;
 
 import javax.swing.*;
@@ -19,9 +19,9 @@ public class Main extends JFrame {
 
         add(Panel1);
         setSize(400, 200);
-        setName("Courses Manager");
+        setTitle("Courses Manager");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+        setResizable(false);
 
         loginButton.addActionListener(new ActionListener() {
             @Override
