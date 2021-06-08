@@ -4,7 +4,6 @@ import com.HibernateUtil.HibernateUtil;
 import com.faewulf.application.allData;
 import com.model.StudentDB;
 import com.model.StudyatDB;
-import com.model.clazzDB;
 import org.hibernate.HibernateError;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -57,6 +56,8 @@ public class studyAt {
 		allData.studyAtList.remove(acc);
 		return true;
 	}
+
+
 
 	public static boolean createStudyAt(StudyatDB acc) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
@@ -135,5 +136,32 @@ public class studyAt {
 		return new DefaultTableModel(result, columns);
 	}
 
+	public static List<StudyatDB> getAllFromClass(String clazz){
+		List<StudyatDB> list = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
 
+		try {
+			String hql = "SELECT ac FROM StudyatDB ac where ac.classId = :clazzid";
+			Query query = session.createQuery(hql);
+			query.setParameter("clazzid", clazz);
+			list = query.list();
+		} catch (HibernateError ex) {
+			System.err.println(ex);
+		}
+		return list;
+	}
+	public static List<StudyatDB> getAllFromStudent(int id){
+		List<StudyatDB> list = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+
+		try {
+			String hql = "SELECT ac FROM StudyatDB ac where ac.studentId = :clazzid";
+			Query query = session.createQuery(hql);
+			query.setParameter("clazzid", id);
+			list = query.list();
+		} catch (HibernateError ex) {
+			System.err.println(ex);
+		}
+		return list;
+	}
 }

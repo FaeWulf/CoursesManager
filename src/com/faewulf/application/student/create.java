@@ -1,4 +1,4 @@
-package com.faewulf.application.clazz;
+package com.faewulf.application.student;
 
 import com.faewulf.application.faewulfUtil;
 import com.model.clazzDB;
@@ -17,8 +17,6 @@ public class create extends JDialog {
 	private JButton buttonCancel;
 	private JTextField idInput;
 	private JTextField yearInput;
-	private JTextField femaleInput;
-	private JTextField maleInput;
 	public boolean isOK = false;
 	public clazzDB result = new clazzDB();
 
@@ -26,7 +24,7 @@ public class create extends JDialog {
 		setContentPane(contentPane);
 		setModal(true);
 		getRootPane().setDefaultButton(buttonOK);
-		setSize(300, 250);
+		setSize(300, 150);
 		setResizable(false);
 
 		buttonOK.setEnabled(false);
@@ -34,12 +32,8 @@ public class create extends JDialog {
 		List<JTextField> list = new ArrayList<>();
 		list.add(idInput);
 		list.add(yearInput);
-		list.add(femaleInput);
-		list.add(maleInput);
 
 		yearInput.setName("number");
-		femaleInput.setName("number");
-		maleInput.setName("number");
 		for (JTextField jTextField : list) {
 
 			jTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -124,9 +118,9 @@ public class create extends JDialog {
 	private void onOK() {
 		isOK = true;
 		result.setId(idInput.getText());
-		result.setFemale(Integer.parseInt(femaleInput.getText()));
-		result.setMale(Integer.parseInt(maleInput.getText()));
-		result.setSize(result.getMale() + result.getFemale());
+		result.setFemale(0);
+		result.setMale(0);
+		result.setSize(0);
 		result.setYear(Integer.parseInt(yearInput.getText()));
 		dispose();
 	}

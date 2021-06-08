@@ -29,11 +29,5 @@
         <property name="sex">
             <column name="sex" sql-type="tinyint(1)"/>
         </property>
-        <set name="studyAt" lazy="false" inverse="true" fetch="join">
-            <key>
-                <column name="student_id"/>
-            </key>
-            <one-to-many class="com.model.StudyatDB"/>
-        </set>
     </class>
 </hibernate-mapping>

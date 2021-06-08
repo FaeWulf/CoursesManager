@@ -1,12 +1,17 @@
 package com.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
 
+@Entity
+@Table(name = "studyat", schema = "coursesmanager", catalog = "")
+@IdClass(StudyatDBPK.class)
 public class StudyatDB implements Serializable {
 	private String classId;
 	private int studentId;
 
+	@Id
+	@Column(name = "class_id", nullable = false, length = 255)
 	public String getClassId() {
 		return classId;
 	}
@@ -15,6 +20,8 @@ public class StudyatDB implements Serializable {
 		this.classId = classId;
 	}
 
+	@Id
+	@Column(name = "student_id", nullable = false)
 	public int getStudentId() {
 		return studentId;
 	}

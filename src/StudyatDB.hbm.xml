@@ -13,8 +13,5 @@
                 <column name="student_id" sql-type="int"/>
             </key-property>
         </composite-id>
-        <many-to-one class="com.model.StudentDB" name="studentId" fetch="join" lazy="false">
-            <column name="student_id"></column>
-        </many-to-one>
     </class>
 </hibernate-mapping>

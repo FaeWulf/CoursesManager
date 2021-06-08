@@ -108,13 +108,4 @@ public class StudentDB {
 		return result;
 	}
 
-	private Collection<StudyatDB> studyAt;
-
-	public Collection<StudyatDB> getStudyAt() {
-		return studyAt;
-	}
-
-	public void setStudyAt(Collection<StudyatDB> studyAt) {
-		this.studyAt = studyAt;
-	}
 }

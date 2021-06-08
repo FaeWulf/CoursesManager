@@ -21,6 +21,7 @@
     <mapping resource="KydkhpDB.hbm.xml"/>
     <mapping resource="StudentDB.hbm.xml"/>
     <mapping resource="StudyatDB.hbm.xml"/>
+    <mapping class="com.model.StudyatDB"/>
 
 
     <!-- DB schema will be updated if needed -->

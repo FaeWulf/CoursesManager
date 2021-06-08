@@ -1,11 +1,15 @@
 package com.model;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
 import java.io.Serializable;
 
 public class StudyatDBPK implements Serializable {
 	private String classId;
 	private int studentId;
 
+	@Column(name = "class_id", nullable = false, length = 255)
+	@Id
 	public String getClassId() {
 		return classId;
 	}
@@ -14,6 +18,8 @@ public class StudyatDBPK implements Serializable {
 		this.classId = classId;
 	}
 
+	@Column(name = "student_id", nullable = false)
+	@Id
 	public int getStudentId() {
 		return studentId;
 	}

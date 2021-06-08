@@ -7,8 +7,13 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+
+import Database.studyAt;
 import com.faewulf.application.Util.*;
 import com.faewulf.application.allData;
+import com.faewulf.application.student.create;
+import com.model.StudyatDB;
 import com.model.clazzDB;
 
 public class clazzPanel {
@@ -71,6 +76,11 @@ public class clazzPanel {
 						String id = (String) tableDB[0].getModel().getValueAt(row, 0);
 						clazzDB temp = (clazzDB) allData.clazzList.stream().filter(E -> E.getId().equals(id)).findFirst().get();
 						clazz.deleteClazz(temp);
+						List<StudyatDB> list = studyAt.getAllFromClass(id);
+						for (StudyatDB studyatDB : list) {
+							studyAt.deleteStudyAt(studyatDB);
+						}
+
 					}
 					tableDB[0].setModel(clazz.modelUpdate());
 				}

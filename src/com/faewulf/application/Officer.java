@@ -4,6 +4,7 @@ import Database.account;
 import com.faewulf.application.account.accountPanel;
 import com.faewulf.application.account.changePass;
 import com.faewulf.application.semester.semesterPanel;
+import com.faewulf.application.student.studentList;
 import com.faewulf.application.student.studentPanel;
 import com.faewulf.application.subject.subjectPanel;
 import com.faewulf.application.clazz.clazzPanel;
@@ -42,14 +43,14 @@ public class Officer extends JFrame{
         JPanel subTab = new subjectPanel().newPanel();
         JPanel accountTab = new accountPanel().newPanel(currentUseAccount);
         JPanel semesterTab = new semesterPanel().newPanel();
-        JPanel classTab = new clazzPanel().newPanel();
         JPanel studentTab = new studentPanel().newPanel();
+        JPanel studentManageTab = new studentList().newPanel();
 
         tabbedPane1.addTab("Accounts", accountTab);
         tabbedPane1.addTab("Subjects", subTab);
         tabbedPane1.addTab("Semesters", semesterTab);
-        tabbedPane1.addTab("Classes", classTab);
         tabbedPane1.addTab("Students and Classes", studentTab);
+        tabbedPane1.addTab("Students Manager", studentManageTab);
         editInfoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

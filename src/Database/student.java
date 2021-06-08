@@ -98,7 +98,7 @@ public class student {
 		Object[][] result = new Object[allData.studentList.size()][columns.length];
 
 		for(int i = 0; i < allData.studentList.size(); i++) {
-			result[i][0] = allData.studentList.get(i).getId();
+			result[i][0] = allData.studentList.get(i).getMssv();
 			result[i][1] = allData.studentList.get(i).getName();
 			result[i][2] = allData.studentList.get(i).getBirthday();
 			result[i][3] = allData.studentList.get(i).getSex();
@@ -121,7 +121,7 @@ public class student {
 		Object[][] result = new Object[allData.studentList.size()][columns.length];
 
 		for(int i = 0; i < allData.studentList.size(); i++) {
-			result[i][0] = allData.studentList.get(i).getId();
+			result[i][0] = allData.studentList.get(i).getMssv();
 			result[i][1] = allData.studentList.get(i).getName();
 			result[i][2] = allData.studentList.get(i).getBirthday();
 			result[i][3] = allData.studentList.get(i).getSex();
@@ -141,7 +141,7 @@ public class student {
 		for(int i = 0; i < allData.studentList.size(); i++) {
 			if(searchString.length() != 0 && !String.valueOf(allData.studentList.get(i).getId()).equals(searchString))
 				continue;
-			result[index][0] = allData.studentList.get(i).getId();
+			result[index][0] = allData.studentList.get(i).getMssv();
 			result[index][1] = allData.studentList.get(i).getName();
 			result[index][2] = allData.studentList.get(i).getBirthday();
 			result[index][3] = allData.studentList.get(i).getSex();
@@ -150,19 +150,38 @@ public class student {
 		return new DefaultTableModel(result, columns);
 	}
 
-	public static List<StudentDB> getStudentNotIn(String clazz) {
+	public static JTable getStudentNotIn(String clazz) {
 		List<StudentDB> list = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
-
 		try {
-			String hql = "SELECT at FROM StudyatDB at join fetch at.studentId where ";
+			String hql = "SELECT st FROM StudentDB st left outer join StudyatDB sa on sa.studentId = st.id where (sa.classId != :clazzID or sa.classId is null) and (st.id not in (select st1.id from StudentDB st1 left outer join StudyatDB sa2 on st1.id = sa2.studentId where sa2.classId = :clazzID)) group by st.mssv";
 			Query query = session.createQuery(hql);
-			query.setParameter("clazz_id", clazz);
+			query.setParameter("clazzID", clazz);
 			list = query.list();
 		} catch (HibernateError ex) {
 			System.err.println(ex);
 		}
-		return list;
-	}
 
+		String[] columns = {"Student ID", "Name", "Birthday", "Sex", "Birth place"};
+		Object[][] result = new Object[list.size()][columns.length];
+
+		for (int i = 0; i < list.size(); i++) {
+			result[i][0] = list.get(i).getMssv();
+			result[i][1] = list.get(i).getName();
+			result[i][2] = list.get(i).getBirthday();
+			result[i][3] = list.get(i).getSex();
+			result[i][4] = list.get(i).getBirthPlace();
+		};
+
+		TableModel model = new DefaultTableModel(result, columns);
+		JTable table = new JTable() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		table.setModel(model);
+		table.getTableHeader().setReorderingAllowed(false);
+		return table;
+	}
 }
