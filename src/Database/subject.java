@@ -2,6 +2,7 @@ package Database;
 
 import com.HibernateUtil.HibernateUtil;
 import com.faewulf.application.allData;
+import com.model.HpDB;
 import com.model.subjectDB;
 import org.hibernate.HibernateError;
 import org.hibernate.Session;
@@ -11,6 +12,7 @@ import org.hibernate.query.Query;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import java.util.ArrayList;
 import java.util.List;
 
 public class subject {
@@ -61,8 +63,25 @@ public class subject {
     public static boolean deleteSubject(subjectDB acc) {
         if(getSubject(acc.getId()) == null)
             return false;
+
+
+
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
+        List<HpDB> list = new ArrayList<>();
+        try {
+            String hql = "SELECT a FROM HpDB a where  a.subjectId = :sId";
+            Query query = session.createQuery(hql);
+            query.setParameter("sId", acc.getId());
+            list = query.list();
+        } catch (HibernateError ex) {
+            System.err.println(ex);
+        }
+
+        for (HpDB hpDB : list) {
+        	hp.deletehp(hpDB);
+        }
+
         try {
             transaction = session.beginTransaction();
             session.delete(acc);

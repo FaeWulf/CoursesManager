@@ -6,8 +6,8 @@
 
     <class name="com.model.KydkhpDB" table="kydkhp" schema="coursesmanager">
         <composite-id class="com.model.KydkhpDBPK">
-            <key-property name="hpId">
-                <column name="hp_id" sql-type="int"/>
+            <key-property name="id">
+                <column name="id" sql-type="int"/>
             </key-property>
             <key-property name="semesterId">
                 <column name="semester_id" sql-type="varchar(255)"/>
@@ -16,5 +16,11 @@
                 <column name="year" sql-type="int"/>
             </key-property>
         </composite-id>
+        <property name="start">
+            <column name="start" sql-type="datetime"/>
+        </property>
+        <property name="end">
+            <column name="end" sql-type="datetime"/>
+        </property>
     </class>
 </hibernate-mapping>

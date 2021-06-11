@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class HpDBPK implements Serializable {
 	private int id;
 	private int subjectId;
+	private int kydkhpId;
 
 	public int getId() {
 		return id;
@@ -22,6 +23,14 @@ public class HpDBPK implements Serializable {
 		this.subjectId = subjectId;
 	}
 
+	public int getKydkhpId() {
+		return kydkhpId;
+	}
+
+	public void setKydkhpId(int kydkhpId) {
+		this.kydkhpId = kydkhpId;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -31,6 +40,7 @@ public class HpDBPK implements Serializable {
 
 		if (id != hpDBPK.id) return false;
 		if (subjectId != hpDBPK.subjectId) return false;
+		if (kydkhpId != hpDBPK.kydkhpId) return false;
 
 		return true;
 	}
@@ -39,6 +49,7 @@ public class HpDBPK implements Serializable {
 	public int hashCode() {
 		int result = id;
 		result = 31 * result + subjectId;
+		result = 31 * result + kydkhpId;
 		return result;
 	}
 }

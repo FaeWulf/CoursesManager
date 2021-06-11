@@ -5,12 +5,15 @@
 <hibernate-mapping>
 
     <class name="com.model.HpDB" table="hp" schema="coursesmanager">
-        <composite-id class="com.model.HpDBPK">
+        <composite-id  class="com.model.HpDBPK">
             <key-property name="id">
                 <column name="id" sql-type="int"/>
             </key-property>
             <key-property name="subjectId">
                 <column name="subject_id" sql-type="int"/>
+            </key-property>
+            <key-property name="kydkhpId">
+                <column name="kydkhp_id" sql-type="int"/>
             </key-property>
         </composite-id>
         <property name="className">

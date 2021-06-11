@@ -22,9 +22,10 @@
     <mapping resource="StudentDB.hbm.xml"/>
     <mapping resource="StudyatDB.hbm.xml"/>
     <mapping class="com.model.StudyatDB"/>
+    <mapping resource="CurrentDB.hbm.xml"/>
 
 
-    <!-- DB schema will be updated if needed -->
+      <!-- DB schema will be updated if needed -->
     <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
   </session-factory>
 </hibernate-configuration>

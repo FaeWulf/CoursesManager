@@ -3,16 +3,16 @@ package com.model;
 import java.io.Serializable;
 
 public class KydkhpDBPK implements Serializable {
-	private int hpId;
+	private int id;
 	private String semesterId;
 	private int year;
 
-	public int getHpId() {
-		return hpId;
+	public int getId() {
+		return id;
 	}
 
-	public void setHpId(int hpId) {
-		this.hpId = hpId;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getSemesterId() {
@@ -38,7 +38,7 @@ public class KydkhpDBPK implements Serializable {
 
 		KydkhpDBPK that = (KydkhpDBPK) o;
 
-		if (hpId != that.hpId) return false;
+		if (id != that.id) return false;
 		if (year != that.year) return false;
 		if (semesterId != null ? !semesterId.equals(that.semesterId) : that.semesterId != null) return false;
 
@@ -47,7 +47,7 @@ public class KydkhpDBPK implements Serializable {
 
 	@Override
 	public int hashCode() {
-		int result = hpId;
+		int result = id;
 		result = 31 * result + (semesterId != null ? semesterId.hashCode() : 0);
 		result = 31 * result + year;
 		return result;

@@ -60,4 +60,9 @@ public class subjectDB {
         result = 31 * result + credit;
         return result;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

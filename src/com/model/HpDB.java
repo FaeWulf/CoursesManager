@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class HpDB implements Serializable {
 	private int id;
 	private int subjectId;
+	private int kydkhpId;
 	private String className;
 	private int weekDay;
 	private int time;
@@ -25,6 +26,14 @@ public class HpDB implements Serializable {
 
 	public void setSubjectId(int subjectId) {
 		this.subjectId = subjectId;
+	}
+
+	public int getKydkhpId() {
+		return kydkhpId;
+	}
+
+	public void setKydkhpId(int kydkhpId) {
+		this.kydkhpId = kydkhpId;
 	}
 
 	public String getClassName() {
@@ -76,6 +85,7 @@ public class HpDB implements Serializable {
 
 		if (id != hpDB.id) return false;
 		if (subjectId != hpDB.subjectId) return false;
+		if (kydkhpId != hpDB.kydkhpId) return false;
 		if (weekDay != hpDB.weekDay) return false;
 		if (time != hpDB.time) return false;
 		if (slot != hpDB.slot) return false;
@@ -89,6 +99,7 @@ public class HpDB implements Serializable {
 	public int hashCode() {
 		int result = id;
 		result = 31 * result + subjectId;
+		result = 31 * result + kydkhpId;
 		result = 31 * result + (className != null ? className.hashCode() : 0);
 		result = 31 * result + weekDay;
 		result = 31 * result + time;
