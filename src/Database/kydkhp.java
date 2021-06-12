@@ -2,6 +2,7 @@ package Database;
 
 import com.HibernateUtil.HibernateUtil;
 import com.faewulf.application.allData;
+import com.model.HpDB;
 import com.model.KydkhpDB;
 import org.hibernate.HibernateError;
 import org.hibernate.Session;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class kydkhp {
-	public static KydkhpDB getKydkhp(String id) {
+	public static KydkhpDB getKydkhp(int id) {
 		KydkhpDB result = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 
@@ -43,8 +44,6 @@ public class kydkhp {
 
 	public static boolean updateKydkhp(KydkhpDB obj) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
-		if (getKydkhp(obj.getSemesterId()) == null)
-			return false;
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -61,6 +60,19 @@ public class kydkhp {
 	public static boolean deleteKydkhp(KydkhpDB acc) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
+
+		List<HpDB> temp = new ArrayList<>();
+
+		for (HpDB hpDB : allData.hpList) {
+			if(hpDB.getKydkhpId() == acc.getId())
+				temp.add(hpDB);
+		}
+		for (HpDB hpDB : temp) {
+			hp.deletehp(hpDB);
+		}
+		if(currentDKHP.getCurrentKy().getId() == acc.getId())
+			currentDKHP.deleteCurrent(currentDKHP.getCurrentKy());
+
 		try {
 			transaction = session.beginTransaction();
 			session.delete(acc);

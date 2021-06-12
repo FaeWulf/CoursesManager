@@ -10,8 +10,13 @@ import com.model.StudyatDB;
 import com.model.clazzDB;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -27,6 +32,7 @@ public class studentPanel {
 	private JSplitPane splitpane;
 	private JButton createNewClassButton;
 	private JButton deleteClassButton;
+	private JTextField search;
 
 	public JPanel newPanel() {
 		JTable[] tableStudent = {studyAt.toTable("")};
@@ -40,11 +46,32 @@ public class studentPanel {
 		removeFromThisClassButton.setEnabled(false);
 		deleteClassButton.setVisible(false);
 
+		search.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) tableStudent[0].getModel()));
+				sorter.setRowFilter(RowFilter.regexFilter(search.getText()));
+				tableStudent[0].setRowSorter(sorter);
+			}
 
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) tableStudent[0].getModel()));
+				sorter.setRowFilter(RowFilter.regexFilter(search.getText()));
+				tableStudent[0].setRowSorter(sorter);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+
+			}
+		});
 
 		tableClass[0].getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
+
+				tableStudent[0].setModel(studyAt.updateTable(""));
 
 				int row = tableClass[0].getSelectedRow();
 				if(row == -1){
@@ -59,7 +86,10 @@ public class studentPanel {
 					addStudentToThisButton.setVisible(true);
 				}
 				String classID = (String) tableClass[0].getValueAt(row, 0);
-				tableStudent[0].setModel(studyAt.updateTable(classID));
+				tableStudent[0] = studyAt.toTable(classID);
+
+				scrpaneStudent.setViewportView(tableStudent[0]);
+
 				if(tableStudent[0].getModel().getRowCount() != 0){
 					removeFromThisClassButton.setVisible(true);
 				}

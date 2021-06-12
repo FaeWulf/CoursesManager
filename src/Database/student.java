@@ -2,7 +2,9 @@ package Database;
 
 import com.HibernateUtil.HibernateUtil;
 import com.faewulf.application.allData;
+import com.model.DkhpDB;
 import com.model.StudentDB;
+import com.model.StudyatDB;
 import org.hibernate.HibernateError;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -11,6 +13,7 @@ import org.hibernate.query.Query;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import java.util.ArrayList;
 import java.util.List;
 
 public class student {
@@ -40,7 +43,22 @@ public class student {
 		return list;
 	}
 
-	public static boolean updateStudent(StudentDB obj) {
+	public static List<StudentDB> getstudentListfromHP(int HPid) {
+		List<StudentDB> list = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+
+		try {
+			String hql = "SELECT ac FROM StudentDB ac inner join DkhpDB d on ac.id = d.studentId where d.hpId = :HPid";
+			Query query = session.createQuery(hql);
+			query.setParameter("HPid", HPid);
+			list = query.list();
+		} catch (HibernateError ex) {
+			System.err.println(ex);
+		}
+		return list;
+	}
+
+		public static boolean updateStudent(StudentDB obj) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		if(getStudent(obj.getId()) == null)
 			return false;
@@ -60,6 +78,29 @@ public class student {
 	public static boolean deleteStudent(StudentDB acc) {
 		if(getStudent(acc.getId()) == null)
 			return false;
+
+		List<StudyatDB> temp = new ArrayList<>();
+
+		for (StudyatDB studyatDB : allData.studyAtList) {
+			if(studyatDB.getStudentId() == acc.getId())
+				temp.add(studyatDB);
+		}
+
+		for (StudyatDB studyatDB : temp) {
+			studyAt.deleteStudyAt(studyatDB);
+		}
+
+		List<DkhpDB> temp1 = new ArrayList<>();
+
+		for (DkhpDB dkhpDB : allData.dkhpList) {
+			if(dkhpDB.getStudentId() == acc.getId())
+				temp1.add(dkhpDB);
+		}
+
+		for (DkhpDB dkhpDB : temp1) {
+			dkhp.deletedkhp(dkhpDB);
+		}
+
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
@@ -71,6 +112,10 @@ public class student {
 			System.err.println(ex);
 			return false;
 		}
+
+
+
+
 		allData.studentList.remove(acc);
 		return true;
 	}
@@ -91,6 +136,28 @@ public class student {
 		}
 		allData.studentList.add(acc);
 		return true;
+	}
+	public static JTable toTable(List<StudentDB> list) {
+		String[] columns = {"Student ID","Name", "Birthday", "Sex", "Birth place"};
+		Object[][] result = new Object[list.size()][columns.length];
+
+		for(int i = 0; i < list.size(); i++) {
+			result[i][0] = list.get(i).getMssv();
+			result[i][1] = list.get(i).getName();
+			result[i][2] = list.get(i).getBirthday();
+			result[i][3] = list.get(i).getSex();
+			result[i][4] = list.get(i).getBirthPlace();
+		};
+		TableModel model = new DefaultTableModel(result, columns);
+		JTable table = new JTable(){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		table.setModel(model);
+		table.getTableHeader().setReorderingAllowed(false);
+		return table;
 	}
 
 	public static JTable toTable() {

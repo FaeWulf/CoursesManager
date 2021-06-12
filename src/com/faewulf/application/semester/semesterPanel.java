@@ -1,16 +1,20 @@
 package com.faewulf.application.semester;
 
+import Database.currentDKHP;
 import Database.hp;
 import Database.semester;
 import com.faewulf.application.Util.doubleCheck;
 import com.faewulf.application.allData;
-import com.model.HpDB;
-import com.model.KydkhpDB;
-import com.model.semesterDB;
+import com.model.*;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
@@ -18,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Database.kydkhp;
-import com.model.subjectDB;
 
 public class semesterPanel {
     private JPanel panel1;
@@ -28,13 +31,14 @@ public class semesterPanel {
     private JScrollPane scrpane;
     private JScrollPane scrpaneSubject;
     private JButton addSubjectButton;
-    private JTextField textField1;
     private JButton enableForCurrentSemesterButton;
     private JButton createNewSessionForButton;
     private JScrollPane scrpaneCourses;
     private JScrollPane scrpaneSessions;
     private JButton removeButton;
     private JButton deleteSessionButton;
+    private JButton viewStudentsButton;
+    private JTextField search;
 
     public JPanel newPanel() {
         JTable[] tableDB = {semester.toTable()};
@@ -52,8 +56,8 @@ public class semesterPanel {
         scrpaneSessions.setViewportView(tableKydkhp[0]);
         removeButton.setEnabled(false);
         addSubjectButton.setEnabled(false);
-
-
+        enableForCurrentSemesterButton.setEnabled(false);
+        viewStudentsButton.setEnabled(false);
         tableDB[0].getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -75,14 +79,39 @@ public class semesterPanel {
             }
         });
 
+
+        search.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) tableCourse[0].getModel()));
+                sorter.setRowFilter(RowFilter.regexFilter(search.getText()));
+                tableCourse[0].setRowSorter(sorter);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) tableCourse[0].getModel()));
+                sorter.setRowFilter(RowFilter.regexFilter(search.getText()));
+                tableCourse[0].setRowSorter(sorter);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+
+            }
+        });
+
         tableKydkhp[0].getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if(tableKydkhp[0].getSelectedRows().length != 1){
                     addSubjectButton.setEnabled(false);
+                    enableForCurrentSemesterButton.setEnabled(false);
                 }
-                else
+                else{
                     addSubjectButton.setEnabled(true);
+                    enableForCurrentSemesterButton.setEnabled(true);
+                }
                 if(tableKydkhp[0].getSelectedRow() != -1){
                     int ID = (int) tableKydkhp[0].getValueAt(tableKydkhp[0].getSelectedRow(), 0);
                     int kyID = allData.kydkhpList.stream().filter(E -> E.getId() == ID).findFirst().get().getId();
@@ -110,6 +139,7 @@ public class semesterPanel {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 removeButton.setEnabled(tableCourse[0].getSelectedRows().length > 0);
+                viewStudentsButton.setEnabled(tableCourse[0].getSelectedRows().length == 1);
             }
         });
 
@@ -136,6 +166,7 @@ public class semesterPanel {
                 }
             }
         });
+
 
         deleteButton.addActionListener(new ActionListener() {
             @Override
@@ -167,11 +198,18 @@ public class semesterPanel {
                 KydkhpDB temp = new KydkhpDB();
                 temp.setSemesterId(ID);
                 temp.setYear(year);
-                temp.setStart(Timestamp.valueOf("2020-1-1 00:00:00"));
-                temp.setEnd(Timestamp.valueOf("2020-1-1 00:00:00"));
-                kydkhp.createKydkhp(temp);
 
-                tableKydkhp[0].setModel(kydkhp.modelUpdate());
+                setDate tab = new setDate(temp);
+                tab.setLocationRelativeTo(null);
+                tab.setResizable(false);
+                tab.pack();
+                tab.setVisible(true);
+                if(tab.isOK){
+                    kydkhp.createKydkhp(tab.result);
+                    tableKydkhp[0].setModel(kydkhp.modelUpdate());
+                }
+
+
             }
         });
 
@@ -184,7 +222,8 @@ public class semesterPanel {
                 }
                 int ID = (int) tableKydkhp[0].getValueAt(tableKydkhp[0].getSelectedRow(), 0);
                 int kyID = allData.kydkhpList.stream().filter(E -> E.getId() == ID).findFirst().get().getId();
-                tableCourse[0].setModel(hp.modelUpdate(kyID));
+                tableCourse[0] = hp.toTable(kyID);
+                scrpaneCourses.setViewportView(tableCourse[0]);
                 deleteSessionButton.setEnabled(true);
             }
         });
@@ -241,6 +280,32 @@ public class semesterPanel {
                     listNotIn = hp.toListNotIn(kyID);
                     addSubjectButton.setEnabled(listNotIn.size() != 0);
                 }
+            }
+        });
+
+        enableForCurrentSemesterButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int ID = (int) tableKydkhp[0].getValueAt(tableKydkhp[0].getSelectedRow(), 0);
+                CurrentDB temp = new CurrentDB();
+                temp.setId(ID);
+                currentDKHP.updateCurrent(temp);
+                doubleCheck tab = new doubleCheck("Operation successfully");
+                tab.pack();
+                tab.setLocationRelativeTo(null);
+                tab.setVisible(true);
+            }
+        });
+
+        viewStudentsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int hpid = (int) tableCourse[0].getValueAt(tableCourse[0].getSelectedRow(), 0);
+                HpDB temp = allData.hpList.stream().filter(E -> E.getId() == hpid).findFirst().get();
+                viewStudents tab = new viewStudents(temp);
+                tab.pack();
+                tab.setLocationRelativeTo(null);
+                tab.setVisible(true);
             }
         });
 

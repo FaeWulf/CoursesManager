@@ -1,8 +1,13 @@
 package com.faewulf.application.subject;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import Database.*;
 import com.faewulf.application.Util.doubleCheck;
@@ -18,33 +23,51 @@ public class subjectPanel {
     private JButton editButton;
     private JButton createButton;
     private JButton deleteButton;
-    private JTextField textField1;
+    private JTextField search;
 
-    public JPanel newPanel(){
+    public JPanel newPanel() {
 
-       editButton.setEnabled(false);
-       deleteButton.setEnabled(false);
+        editButton.setEnabled(false);
+        deleteButton.setEnabled(false);
 
         JTable tableDB[] = {subject.toTable()};
         tableDB[0].setAutoCreateRowSorter(true);
         scrpane.setViewportView(tableDB[0]);
 
+        search.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) tableDB[0].getModel()));
+                sorter.setRowFilter(RowFilter.regexFilter(search.getText()));
+                tableDB[0].setRowSorter(sorter);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) tableDB[0].getModel()));
+                sorter.setRowFilter(RowFilter.regexFilter(search.getText()));
+                tableDB[0].setRowSorter(sorter);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+
+            }
+        });
+
         tableDB[0].getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                if(tableDB[0].getSelectedRows().length == 1){
+                if (tableDB[0].getSelectedRows().length == 1) {
                     editButton.setEnabled(true);
                     deleteButton.setEnabled(true);
+                } else if (tableDB[0].getSelectedRows().length > 1) {
+                    deleteButton.setEnabled(true);
+                    editButton.setEnabled(false);
+                } else {
+                    editButton.setEnabled(false);
+                    deleteButton.setEnabled(false);
                 }
-                else
-                    if(tableDB[0].getSelectedRows().length > 1){
-                        deleteButton.setEnabled(true);
-                        editButton.setEnabled(false);
-                    }
-                    else {
-                        editButton.setEnabled(false);
-                        deleteButton.setEnabled(false);
-                    }
             }
         });
 
@@ -55,7 +78,7 @@ public class subjectPanel {
                 tab.setLocationRelativeTo(null);
                 tab.setVisible(true);
 
-                if(tab.isOk){
+                if (tab.isOk) {
                     subject.createSubject(tab.result);
                     tableDB[0].setModel(subject.modelUpdate());
                 }
@@ -69,7 +92,7 @@ public class subjectPanel {
                 doubleCheck tab = new doubleCheck("Are you sure to delete all selected sucjects?");
                 tab.setLocationRelativeTo(null);
                 tab.setVisible(true);
-                if(tab.isAccept()){
+                if (tab.isAccept()) {
                     int[] rows = tableDB[0].getSelectedRows();
                     for (int row : rows) {
                         int id = (int) tableDB[0].getModel().getValueAt(row, 0);
@@ -90,13 +113,12 @@ public class subjectPanel {
                 tab.setLocationRelativeTo(null);
                 tab.setVisible(true);
 
-                if(tab.isOk){
+                if (tab.isOk) {
                     subject.updateSubject(tab.result);
                     tableDB[0].setModel(subject.modelUpdate());
                 }
             }
         });
-
 
 
         return panel1;

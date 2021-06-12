@@ -14,6 +14,7 @@ public class allData {
     public static List<StudyatDB> studyAtList = studyAt.getStudyAtList();
     public static List<KydkhpDB> kydkhpList = kydkhp.getKydkhpList();
     public static List<HpDB> hpList = hp.getHpList();
+    public static List<DkhpDB> dkhpList = dkhp.getdkhpList();
     public static List<scheduleTime> scheduleTimeList = new scheduleTime().output();
 
     public static class scheduleTime{

@@ -2,6 +2,7 @@ package Database;
 
 import com.HibernateUtil.HibernateUtil;
 import com.faewulf.application.allData;
+import com.model.StudyatDB;
 import com.model.clazzDB;
 import org.hibernate.HibernateError;
 import org.hibernate.Session;
@@ -11,6 +12,7 @@ import org.hibernate.query.Query;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import java.util.ArrayList;
 import java.util.List;
 
 public class clazz {
@@ -62,6 +64,18 @@ public class clazz {
 			return false;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
+
+
+		List<StudyatDB> temp = new ArrayList<>();
+		for (StudyatDB studyatDB : allData.studyAtList) {
+			if(studyatDB.getClassId().equals(acc.getId())){
+				temp.add(studyatDB);
+			}
+		}
+		for (StudyatDB studyatDB : temp) {
+			studyAt.deleteStudyAt(studyatDB);
+		}
+
 		try {
 			transaction = session.beginTransaction();
 			session.delete(acc);
@@ -71,6 +85,7 @@ public class clazz {
 			System.err.println(ex);
 			return false;
 		}
+
 		allData.clazzList.remove(acc);
 		return true;
 	}

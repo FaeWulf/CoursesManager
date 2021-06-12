@@ -11,6 +11,7 @@ import org.hibernate.query.Query;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import java.util.ArrayList;
 import java.util.List;
 
 public class semester {
@@ -63,6 +64,18 @@ public class semester {
             return false;
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
+
+        List<KydkhpDB> temp = new ArrayList<>();
+
+        for (KydkhpDB kydkhpDB : allData.kydkhpList) {
+            if(kydkhpDB.getSemesterId().equals(acc.getId()) && kydkhpDB.getYear() == acc.getYear())
+            	temp.add(kydkhpDB);
+        }
+
+        for (KydkhpDB kydkhpDB : temp) {
+            kydkhp.deleteKydkhp(kydkhpDB);
+        }
+
         try {
             transaction = session.beginTransaction();
             session.delete(acc);

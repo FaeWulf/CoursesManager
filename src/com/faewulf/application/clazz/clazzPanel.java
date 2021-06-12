@@ -21,7 +21,7 @@ public class clazzPanel {
 	private JScrollPane scrpane;
 	private JButton createButton;
 	private JButton deleteButton;
-	private JTextField textField1;
+	private JTextField search;
 	
 	public JPanel newPanel() {
 

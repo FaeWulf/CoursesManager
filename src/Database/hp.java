@@ -2,6 +2,7 @@ package Database;
 
 import com.HibernateUtil.HibernateUtil;
 import com.faewulf.application.allData;
+import com.model.DkhpDB;
 import com.model.HpDB;
 import com.model.subjectDB;
 import org.hibernate.HibernateError;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class hp {
-	public static HpDB gethp(String id) {
+	public static HpDB gethp(int id) {
 		HpDB result = null;
 		Session session = HibernateUtil.getSessionFactory().openSession();
 
@@ -39,6 +40,23 @@ public class hp {
 		} catch (HibernateError ex) {
 			System.err.println(ex);
 		}
+		return list;
+	}
+
+	public static List<HpDB> getHp4Student(int StudentID, int kyID) {
+		List<HpDB> list = null;
+		Session session = HibernateUtil.getSessionFactory().openSession();
+
+		try {
+			String hql = "SELECT hp FROM HpDB hp where hp.id not in (select hp2.id from HpDB hp2 inner join DkhpDB d on d.hpId = hp2.id where d.studentId = :studentID and hp2.kydkhpId = :kyID) and hp.kydkhpId = :kyID";
+			Query query = session.createQuery(hql);
+			query.setParameter("studentID", StudentID);
+			query.setParameter("kyID", kyID);
+			list = query.list();
+		} catch (HibernateError ex) {
+			System.err.println(ex);
+		}
+
 		return list;
 	}
 
@@ -83,6 +101,16 @@ public class hp {
 	public static boolean deletehp(HpDB acc) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
+		List<DkhpDB> temp = new ArrayList<>();
+		for (DkhpDB dkhpDB : allData.dkhpList) {
+			if(dkhpDB.getHpId() == acc.getId())
+				temp.add(dkhpDB);
+		}
+
+		for (DkhpDB dkhpDB : temp) {
+			dkhp.deletedkhp(dkhpDB);
+		}
+
 		try {
 			transaction = session.beginTransaction();
 			session.delete(acc);
@@ -117,7 +145,7 @@ public class hp {
 		String[] columns = {"ID", "Subject name", "credit", "Classname", "Slot", "teacher ID", "Schedule Time", "Week day"};
 		List<HpDB> list = getHp4Table(kyID);
 		Object[][] result = new Object[list.size()][columns.length];
-
+		String[] weekName = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 		for (int i = 0; i < list.size(); i++) {
 			int finalI = i;
 			subjectDB temp = allData.subjectList.stream().filter(E -> E.getId() == list.get(finalI).getSubjectId()).findFirst().get();
@@ -127,8 +155,8 @@ public class hp {
 			result[i][3] = list.get(i).getClassName();
 			result[i][4] = list.get(i).getSlot();
 			result[i][5] = list.get(i).getTeacherId();
-			result[i][6] = list.get(i).getTime();
-			result[i][7] = list.get(i).getWeekDay();
+			result[i][6] = "#" +  allData.scheduleTimeList.get(list.get(i).getTime() - 1).index + " " + allData.scheduleTimeList.get(list.get(i).getTime() - 1).time;
+			result[i][7] = weekName[list.get(i).getWeekDay()];
 		}
 		TableModel model = new DefaultTableModel(result, columns);
 		JTable table = new JTable() {
@@ -146,7 +174,7 @@ public class hp {
 		String[] columns = {"ID", "Subject name", "credit", "Classname", "Slot", "teacher ID", "Schedule Time", "Week day"};
 		List<HpDB> list = getHp4Table(kyID);
 		Object[][] result = new Object[list.size()][columns.length];
-
+		String[] weekName = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 		for (int i = 0; i < list.size(); i++) {
 			int finalI = i;
 			subjectDB temp = allData.subjectList.stream().filter(E -> E.getId() == list.get(finalI).getSubjectId()).findFirst().get();
@@ -156,8 +184,8 @@ public class hp {
 			result[i][3] = list.get(i).getClassName();
 			result[i][4] = list.get(i).getSlot();
 			result[i][5] = list.get(i).getTeacherId();
-			result[i][6] = list.get(i).getTime();
-			result[i][7] = list.get(i).getWeekDay();
+			result[i][6] = "#" +  allData.scheduleTimeList.get(list.get(i).getTime() - 1).index + " " + allData.scheduleTimeList.get(list.get(i).getTime() - 1).time;
+			result[i][7] = weekName[list.get(i).getWeekDay()];
 		}
 		return new DefaultTableModel(result, columns);
 	}
@@ -192,5 +220,54 @@ public class hp {
 		}
 
 		return list;
+	}
+
+	public static JTable toTableStudent(int StudentID, int kyID) {
+		String[] columns = {"ID", "Subject name", "credit", "Classname", "Slot", "teacher ID", "Schedule Time", "Week day"};
+		List<HpDB> list = getHp4Student(StudentID, kyID);
+		Object[][] result = new Object[list.size()][columns.length];
+		String[] weekName = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+		for (int i = 0; i < list.size(); i++) {
+			int finalI = i;
+			subjectDB temp = allData.subjectList.stream().filter(E -> E.getId() == list.get(finalI).getSubjectId()).findFirst().get();
+			result[i][0] = list.get(i).getId();
+			result[i][1] = temp.getName();
+			result[i][2] = temp.getCredit();
+			result[i][3] = list.get(i).getClassName();
+			result[i][4] = list.get(i).getSlot();
+			result[i][5] = list.get(i).getTeacherId();
+			result[i][6] = "#" +  allData.scheduleTimeList.get(list.get(i).getTime() - 1).index + " " + allData.scheduleTimeList.get(list.get(i).getTime() - 1).time;
+			result[i][7] = weekName[list.get(i).getWeekDay()];
+		}
+		TableModel model = new DefaultTableModel(result, columns);
+		JTable table = new JTable() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		table.setModel(model);
+		table.getTableHeader().setReorderingAllowed(false);
+		return table;
+	}
+
+	public static TableModel modelUpdateStudent(int StudentID, int kyID) {
+		String[] columns = {"ID", "Subject name", "credit", "Classname", "Slot", "teacher ID", "Schedule Time", "Week day"};
+		List<HpDB> list = getHp4Student(StudentID, kyID);
+		Object[][] result = new Object[list.size()][columns.length];
+		String[] weekName = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+		for (int i = 0; i < list.size(); i++) {
+			int finalI = i;
+			subjectDB temp = allData.subjectList.stream().filter(E -> E.getId() == list.get(finalI).getSubjectId()).findFirst().get();
+			result[i][0] = list.get(i).getId();
+			result[i][1] = temp.getName();
+			result[i][2] = temp.getCredit();
+			result[i][3] = list.get(i).getClassName();
+			result[i][4] = list.get(i).getSlot();
+			result[i][5] = list.get(i).getTeacherId();
+			result[i][6] = "#" +  allData.scheduleTimeList.get(list.get(i).getTime() - 1).index + " " + allData.scheduleTimeList.get(list.get(i).getTime() - 1).time;
+			result[i][7] = weekName[list.get(i).getWeekDay()];
+		}
+		return new DefaultTableModel(result, columns);
 	}
 }

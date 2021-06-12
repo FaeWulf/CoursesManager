@@ -9,8 +9,13 @@ import com.model.StudentDB;
 import com.model.StudyatDB;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.event.*;
 import java.util.List;
 
@@ -22,6 +27,7 @@ public class studentList extends JDialog {
 	private JButton editButton;
 	private JButton resetButton;
 	private JButton signedSubjectsButton;
+	private JTextField search;
 
 	public studentList() {
 		setContentPane(contentPane);
@@ -47,6 +53,27 @@ public class studentList extends JDialog {
 					resetButton.setEnabled(false);
 					signedSubjectsButton.setEnabled(false);
 				}
+			}
+		});
+
+		search.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) tableDB[0].getModel()));
+				sorter.setRowFilter(RowFilter.regexFilter(search.getText()));
+				tableDB[0].setRowSorter(sorter);
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) tableDB[0].getModel()));
+				sorter.setRowFilter(RowFilter.regexFilter(search.getText()));
+				tableDB[0].setRowSorter(sorter);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+
 			}
 		});
 
@@ -122,6 +149,21 @@ public class studentList extends JDialog {
 					student.updateStudent(tab.result);
 					tableDB[0].setModel(student.modelUpdate());
 				}
+			}
+		});
+
+		signedSubjectsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int row = tableDB[0].getSelectedRow();
+				String id = (String) tableDB[0].getValueAt(row, 0);
+				StudentDB temp =  allData.studentList.stream().filter(E -> E.getMssv() == id).findFirst().get();
+
+				subList tab=  new subList(temp);
+				tab.pack();
+				tab.setLocationRelativeTo(null);
+				tab.setResizable(false);
+				tab.setVisible(true);
 			}
 		});
 	}

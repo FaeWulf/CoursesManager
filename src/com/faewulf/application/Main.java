@@ -1,5 +1,6 @@
 package com.faewulf.application;
 import com.faewulf.application.Util.popup;
+import com.model.StudentDB;
 import com.model.accountDB;
 
 import javax.swing.*;
@@ -32,16 +33,28 @@ public class Main extends JFrame {
                 List<accountDB> list = allData.accountList;
                 accountDB temp = null;
 
-
                 for (com.model.accountDB accountDB : list) {
                     if (username.equals(accountDB.getUsername())) {
                         temp = accountDB;
                     }
                 }
 
+                if(temp == null) {
+                    for (StudentDB studentDB : allData.studentList) {
+                        if(studentDB.getUsername().equals(username) && studentDB.getPassword().equals(password)){
+                            Student tab = new Student(studentDB);
+                            dispose();
+                            tab.setLocationRelativeTo(null);
+                            tab.setVisible(true);
+                            return;
+                        }
+
+                    }
+                }
+
                 if (temp == null){
                     popup warn = new popup("Username does not exist.");
-                    warn.setSize(200, 100);
+                    warn.pack();
                     warn.setLocationRelativeTo(null);
                     warn.setVisible(true);
                 }
@@ -49,11 +62,6 @@ public class Main extends JFrame {
                     if(temp.getPassword().equals(password)){
                         if(temp.getAccountType() == 0) {
                             Officer tab = new Officer(temp);
-                            dispose();
-                            tab.setLocationRelativeTo(null);
-                            tab.setVisible(true);
-                        } else  {
-                            Student tab = new Student();
                             dispose();
                             tab.setLocationRelativeTo(null);
                             tab.setVisible(true);

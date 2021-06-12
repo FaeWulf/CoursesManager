@@ -64,7 +64,15 @@ public class subject {
         if(getSubject(acc.getId()) == null)
             return false;
 
+        List<HpDB> temp = new ArrayList<>();
+        for (HpDB hpDB : allData.hpList) {
+            if(hpDB.getSubjectId() == acc.getId())
+                temp.add(hpDB);
+        }
 
+        for (HpDB hpDB : temp) {
+            hp.deletehp(hpDB);
+        }
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
