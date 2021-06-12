@@ -103,7 +103,8 @@ public class semester {
             System.err.println(ex);
             return false;
         }
-        allData.semesterList.add(acc);
+        allData.semesterList.clear();
+        allData.semesterList = getSemesterList();
         return true;
     }
 

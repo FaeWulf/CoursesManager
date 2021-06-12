@@ -134,7 +134,8 @@ public class student {
 			System.err.println(ex);
 			return false;
 		}
-		allData.studentList.add(acc);
+		allData.studentList.clear();
+		allData.studentList = getstudentList();
 		return true;
 	}
 	public static JTable toTable(List<StudentDB> list) {

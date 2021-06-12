@@ -117,7 +117,8 @@ public class subject {
             System.err.println(ex);
             return false;
         }
-        allData.subjectList.add(acc);
+        allData.subjectList.clear();
+        allData.subjectList = getSubjectList();
         return true;
     }
 

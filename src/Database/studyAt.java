@@ -71,7 +71,8 @@ public class studyAt {
 			System.err.println(ex);
 			return false;
 		}
-		allData.studyAtList.add(acc);
+		allData.studyAtList.clear();
+		allData.studyAtList = getStudyAtList();
 		return true;
 	}
 

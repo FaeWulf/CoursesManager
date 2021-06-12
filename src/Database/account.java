@@ -89,7 +89,8 @@ public class account {
             System.err.println(ex);
             return false;
         }
-        allData.accountList.add(acc);
+        allData.accountList.clear();
+        allData.accountList = getAccountList();
         return true;
     }
 

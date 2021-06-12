@@ -104,7 +104,8 @@ public class clazz {
 			System.err.println(ex);
 			return false;
 		}
-		allData.clazzList.add(acc);
+		allData.clazzList.clear();
+		allData.clazzList = getClazzList();
 		return true;
 	}
 
