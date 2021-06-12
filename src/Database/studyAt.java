@@ -93,7 +93,7 @@ public class studyAt {
 				result[index][0] = temp.getMssv();
 				result[index][1] = temp.getName();
 				result[index][2] = temp.getBirthday();
-				result[index][3] = temp.getSex();
+				result[index][3] = temp.getSex() == 1 ? "Male" : "Female";
 				result[index++][4] = temp.getBirthPlace();
 			}
 		}
@@ -128,7 +128,7 @@ public class studyAt {
 				result[index][0] = temp.getMssv();
 				result[index][1] = temp.getName();
 				result[index][2] = temp.getBirthday();
-				result[index][3] = temp.getSex();
+				result[index][3] = temp.getSex() == 1 ? "Male" : "Female";
 				result[index++][4] = temp.getBirthPlace();
 			}
 		}

@@ -145,7 +145,7 @@ public class student {
 			result[i][0] = list.get(i).getMssv();
 			result[i][1] = list.get(i).getName();
 			result[i][2] = list.get(i).getBirthday();
-			result[i][3] = list.get(i).getSex();
+			result[i][3] = list.get(i).getSex() == 1 ? "Male" : "Female";
 			result[i][4] = list.get(i).getBirthPlace();
 		};
 		TableModel model = new DefaultTableModel(result, columns);
@@ -168,7 +168,7 @@ public class student {
 			result[i][0] = allData.studentList.get(i).getMssv();
 			result[i][1] = allData.studentList.get(i).getName();
 			result[i][2] = allData.studentList.get(i).getBirthday();
-			result[i][3] = allData.studentList.get(i).getSex();
+			result[i][3] = allData.studentList.get(i).getSex() == 1 ? "Male" : "Female";
 			result[i][4] = allData.studentList.get(i).getBirthPlace();
 		};
 		TableModel model = new DefaultTableModel(result, columns);
@@ -191,7 +191,7 @@ public class student {
 			result[i][0] = allData.studentList.get(i).getMssv();
 			result[i][1] = allData.studentList.get(i).getName();
 			result[i][2] = allData.studentList.get(i).getBirthday();
-			result[i][3] = allData.studentList.get(i).getSex();
+			result[i][3] = allData.studentList.get(i).getSex() == 1 ? "Male" : "Female";
 			result[i][4] = allData.studentList.get(i).getBirthPlace();
 		};
 		return new DefaultTableModel(result, columns);
@@ -211,7 +211,7 @@ public class student {
 			result[index][0] = allData.studentList.get(i).getMssv();
 			result[index][1] = allData.studentList.get(i).getName();
 			result[index][2] = allData.studentList.get(i).getBirthday();
-			result[index][3] = allData.studentList.get(i).getSex();
+			result[index][3] = allData.studentList.get(i).getSex() == 1 ? "Male" : "Female";
 			result[index][4] = allData.studentList.get(i).getBirthPlace();
 		};
 		return new DefaultTableModel(result, columns);
@@ -236,7 +236,7 @@ public class student {
 			result[i][0] = list.get(i).getMssv();
 			result[i][1] = list.get(i).getName();
 			result[i][2] = list.get(i).getBirthday();
-			result[i][3] = list.get(i).getSex();
+			result[i][3] = list.get(i).getSex() == 1 ? "Male" : "Female";
 			result[i][4] = list.get(i).getBirthPlace();
 		};
 

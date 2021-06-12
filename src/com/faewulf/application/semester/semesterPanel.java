@@ -225,6 +225,14 @@ public class semesterPanel {
                 tableCourse[0] = hp.toTable(kyID);
                 scrpaneCourses.setViewportView(tableCourse[0]);
                 deleteSessionButton.setEnabled(true);
+
+                tableCourse[0].getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+                    @Override
+                    public void valueChanged(ListSelectionEvent e) {
+                        removeButton.setEnabled(tableCourse[0].getSelectedRows().length > 0);
+                        viewStudentsButton.setEnabled(tableCourse[0].getSelectedRows().length == 1);
+                    }
+                });
             }
         });
 

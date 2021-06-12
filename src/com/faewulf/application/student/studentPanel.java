@@ -90,6 +90,14 @@ public class studentPanel {
 
 				scrpaneStudent.setViewportView(tableStudent[0]);
 
+				tableStudent[0].getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+					@Override
+					public void valueChanged(ListSelectionEvent e) {
+						int[] row = tableStudent[0].getSelectedRows();
+						removeFromThisClassButton.setEnabled(row.length > 0);
+					}
+				});
+
 				if(tableStudent[0].getModel().getRowCount() != 0){
 					removeFromThisClassButton.setVisible(true);
 				}
