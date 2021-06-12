@@ -23,7 +23,6 @@ public class signIn {
 	private JButton addButton;
 	private JPanel panel1;
 	private JButton cancel;
-	private JTextField textField1;
 
 
 	public JPanel getPane(StudentDB current) {
@@ -35,6 +34,9 @@ public class signIn {
 
 		JTable[] tableDB_ =  {dkhp.toTable(current.getId(), curr.getId())};
 
+		if(tableDB_[0].getRowCount() >= 8){
+			addButton.setEnabled(false);
+		};
 
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		cancel.setVisible(false);
@@ -66,7 +68,7 @@ public class signIn {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				addButton.setEnabled(tableDB[0].getSelectedRows().length == 1);
-				if(tableDB_[0].getRowCount() > 8){
+				if(tableDB_[0].getRowCount() >= 8){
 					addButton.setEnabled(false);
 				};
 			}
